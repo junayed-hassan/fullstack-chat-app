@@ -5,7 +5,7 @@ import { useAuthStore } from "./useAuthStore";
 
 
 export const useChatStore = create((set, get) => ({
-  message: [],
+  messages: [],
   users: [],
   selectedUser: null,
   isUsersLoading: false,
@@ -36,8 +36,6 @@ export const useChatStore = create((set, get) => ({
   },
 
   sendMessage: async (messageData) => {
-    console.log(messageData);
-
     const { selectedUser, message } = get();
     console.log(selectedUser._id, message);
 
@@ -58,11 +56,13 @@ export const useChatStore = create((set, get) => ({
 
     const socket = useAuthStore.getState().socket;
 
-    // todo: optimize this one later
+
     socket.on("newMessage", (newMessage) => {
-      if (newMessage.senderId !== selectedUser._id) return;
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
+
       set({
-        message: [...get().message, newMessage],
+        messages: [...get().messages, newMessage],
       });
     });
   },
