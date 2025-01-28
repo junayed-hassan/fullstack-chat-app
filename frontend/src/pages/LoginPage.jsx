@@ -99,7 +99,7 @@ function LoginPage() {
                   Loading...
                 </>
               ) : (
-                "Create Account"
+                " Sign in "
               )}
             </button>
           </form>
